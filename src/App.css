@@ -1,3 +1,60 @@
 .App {
   text-align: center;
+  display: grid;
+  grid-template-rows: 3fr 2fr 8fr;
+  border: 2px purple solid;
+  height: 100vh;
+}
+
+.App-header {
+  border: 2px red solid;
+  grid-area: 'header';
+}
+
+.Navbar {
+  border: 2px green solid;
+  grid-area: 'nav';
+}
+
+.Content {
+  border: 2px blue solid;
+  grid-area: 'content';
+}
+
+.button {
+  text-align: center;
+  padding: 5px;
+  margin: 5px;
+}
+
+.articlesList {
+  padding: 0;
+  margin: 0;
+}
+
+.articleCard {
+  display: grid;
+  grid-template-rows: 50% 50%;
+  grid-template-columns: 20% 80%;
+  list-style-type: none;
+  margin: 2px;
+  padding: 5px;
+  border: 2px lightblue solid;
+  align-items: center;
+}
+
+.artTitle {
+  grid-column-start: 2;
+  grid-row: 1/3;
+  margin: 5px;
+}
+
+.artVotes {
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.artAuthor {
+  grid-column-start: 1;
+  grid-row-start: 2;
 }
