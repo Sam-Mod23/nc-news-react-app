@@ -9,3 +9,9 @@ export const getArticles = (params) => {
     return data.articles;
   });
 };
+
+export const getArticle = (article_id) => {
+  return ncApi.get(`/articles/${article_id}`).then(({ data }) => {
+    return data.article;
+  });
+};

@@ -1,24 +1,37 @@
 .App {
   text-align: center;
   display: grid;
-  grid-template-rows: 3fr 2fr 8fr;
-  border: 2px purple solid;
+  grid-template-rows: 3fr 1fr 8fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'App-header' 'Navbar' 'Content';
   height: 100vh;
 }
 
 .App-header {
   border: 2px red solid;
-  grid-area: 'header';
+  grid-area: App-header;
 }
 
 .Navbar {
   border: 2px green solid;
-  grid-area: 'nav';
+  grid-area: Navbar;
 }
 
 .Content {
   border: 2px blue solid;
-  grid-area: 'content';
+  grid-area: Content;
+}
+
+@media only screen and (min-width: 450px) {
+  .App {
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 4fr;
+    grid-template-areas: 'App-header App-header' 'Navbar Content';
+  }
+  .Navbar {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .button {
@@ -52,9 +65,11 @@
 .artVotes {
   grid-column-start: 1;
   grid-row-start: 1;
+  font-size: smaller;
 }
 
 .artAuthor {
   grid-column-start: 1;
   grid-row-start: 2;
+  font-size: small;
 }

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { getArticles } from '../api/articles';
+import { Link } from '@reach/router';
 
 class ArticleList extends Component {
   state = {
-    articles: []
+    articles: [],
+    isLoading: true
   };
 
   componentDidMount = () => {
@@ -18,17 +20,23 @@ class ArticleList extends Component {
   };
 
   render() {
-    const { articles } = this.state;
+    const { articles, isLoading } = this.state;
+    if (isLoading) {
+      return <p>Loading...</p>;
+    }
     return (
       <main>
         <ul className='articlesList'>
           {articles.map(({ article_id, author, title, topic, votes }) => {
             return (
               <li key={article_id} className='articleCard'>
-                <p className='artTitle'>{title}</p>
+                <Link to={`/articles/${article_id}`} className='artTitle'>
+                  {title}
+                </Link>
                 <p className='artAuthor'>{author}</p>
                 <p className='artVotes'>
-                  <button className='button'>+</button>votes: {votes}
+                  <button className='button'>+</button>
+                  {votes} votes
                 </p>
               </li>
             );
@@ -40,7 +48,7 @@ class ArticleList extends Component {
 
   fetchArticles = (url) => {
     getArticles(url).then((articles) => {
-      this.setState({ articles });
+      this.setState({ articles, isLoading: false });
     });
   };
 }
