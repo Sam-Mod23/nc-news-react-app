@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { getArticle } from '../api/articles';
 import ErrorHandler from './ErrorHandler';
-import { getComments } from '../api/comments';
+
+import Comments from './Comments';
 
 class SingleArticle extends Component {
   state = {
     article: {},
     isLoading: true,
-    err: null,
-    viewComments: false,
-    addComments: false,
-    comments: []
+    err: null
   };
 
   componentDidMount = () => {
@@ -18,24 +16,9 @@ class SingleArticle extends Component {
     this.fetchArticle(article_id);
   };
 
-  handleCommentsClick = (event) => {
-    const { value } = event.target;
-    const {
-      article: { article_id },
-      viewComments
-    } = this.state;
-    if (value === 'view' && !viewComments) {
-      getComments(article_id).then((comments) => {
-        this.setState({ comments, viewComments: true });
-      });
-    } else if (value === 'view' && viewComments) {
-      this.setState({ comments: [], viewComments: false });
-    }
-  };
-
   render() {
-    const { article, isLoading, err, viewComments, comments } = this.state;
-    const { author, title, body, topic, votes } = article;
+    const { article, isLoading, err } = this.state;
+    const { author, title, body, topic, votes, article_id } = article;
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -49,45 +32,10 @@ class SingleArticle extends Component {
       <main>
         <h2>{title}</h2>
         <h4>
-          {author} | {topic} | votes: {votes}{' '}
-          <button className='button'>+</button>
+          {author} | {topic} | votes: {votes} <button className='button'>+</button>
         </h4>
         <section>{body}</section>
-
-        {/* Comments buttons */}
-        <button
-          className='button'
-          value='view'
-          onClick={this.handleCommentsClick}
-        >
-          {viewComments ? 'Hide Comments' : 'View Comments'}
-        </button>
-        <button
-          className='button'
-          value='add'
-          onClick={this.handleCommentsClick}
-        >
-          Add Comment
-        </button>
-
-        {/* Comments list */}
-        <ul className='CommentsList'>
-          {comments.map((comment) => {
-            const { created_at, author, body, votes } = comment;
-            return (
-              <li className='CommentCard'>
-                <h4>
-                  {author} | {created_at}
-                </h4>
-                <section>{body}</section>
-                <p>
-                  Votes: {votes}
-                  <button className='button'>+</button>
-                </p>
-              </li>
-            );
-          })}
-        </ul>
+        <Comments article_id={article_id} username={this.props.username} />
       </main>
     );
   }
