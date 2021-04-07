@@ -61,7 +61,7 @@ class Comments extends Component {
         {viewPostComment ? (
           <form>
             <label htmlFor='body'></label>
-            <input type='text' key='body' name='body'></input>
+            <textarea type='text' key='body' name='body'></textarea>
             <button onClick={this.handleCommentSubmit}>Submit</button>
           </form>
         ) : (

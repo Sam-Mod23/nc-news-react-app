@@ -31,3 +31,8 @@
   grid-row-start: 2;
   font-size: small;
 }
+
+.artBody {
+  padding: 5px;
+  margin: 5px;
+}

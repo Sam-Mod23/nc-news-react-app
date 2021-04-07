@@ -34,7 +34,7 @@ class SingleArticle extends Component {
         <h4>
           {author} | {topic} | votes: {votes} <button className='button'>+</button>
         </h4>
-        <section>{body}</section>
+        <section className='artBody'>{body}</section>
         <Comments article_id={article_id} username={this.props.username} />
       </main>
     );
