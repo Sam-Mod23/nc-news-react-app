@@ -1,0 +1,9 @@
+.CommentsList {
+  padding: 20px;
+  margin: 0;
+}
+
+.CommentCard {
+  border: 2px mediumspringgreen solid;
+  list-style-type: none;
+}
