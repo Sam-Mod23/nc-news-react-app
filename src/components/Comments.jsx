@@ -6,7 +6,8 @@ import ErrorHandler from './ErrorHandler';
 
 class Comments extends Component {
   state = {
-    err: null,
+    viewCommentsErr: null,
+    postCommentsErr: null,
     isLoading: true,
     viewComments: false,
     viewPostComment: false,
@@ -25,10 +26,10 @@ class Comments extends Component {
       }
     }
     if (value === 'post') {
-      viewPostComment ? this.setState({ viewPostComment: false }) : this.setState({ viewPostComment: true });
+      viewPostComment ? this.setState({ viewPostComment: false, postCommentsErr: null }) : this.setState({ viewPostComment: true });
     }
     if (value === 'delete') {
-      deleteComment(this.props.article_id, id).then(() => {
+      deleteComment(id).then(() => {
         this.setState({ viewComments: true, isLoading: true });
         this.fetchComments();
       });
@@ -40,18 +41,23 @@ class Comments extends Component {
     const { value } = event.target.form[0];
     const { article_id, username } = this.props;
 
-    postComment(article_id, username, value).then(() => {
-      getComments(article_id).then((comments) => {
-        this.setState({ comments, viewComments: true, viewPostComment: false });
+    postComment(article_id, username, value)
+      .then((comment) => {
+        this.setState((currState) => {
+          return { comments: [comment, ...currState.comments], viewPostComment: false };
+        });
+      })
+      .catch((err) => {
+        this.setState({ postCommentsErr: err, viewPostComment: true });
+        this.fetchComments();
       });
-    });
   };
 
   render() {
-    const { err, viewComments, viewPostComment, comments, isLoading } = this.state;
+    const { viewCommentsErr, postCommentsErr, viewComments, viewPostComment, comments, isLoading } = this.state;
     const { username } = this.props;
-    if (err) {
-      return <ErrorHandler err={err} />;
+    if (viewCommentsErr) {
+      return <ErrorHandler err={viewCommentsErr} />;
     }
     return (
       <div>
@@ -62,6 +68,8 @@ class Comments extends Component {
           handleCommentsClick={this.handleCommentsClick}
           handleCommentSubmit={this.handleCommentSubmit}
         />
+        {postCommentsErr ? <ErrorHandler status={400} msg={'Incomplete fields, please try again'} /> : ''}
+
         {/* Comments list, will display Loading if view comments has been clicked */}
         {isLoading && viewComments ? <p>Loading...</p> : ''}
         <CommentsList comments={comments} username={username} handleCommentsClick={this.handleCommentsClick} />
@@ -75,7 +83,7 @@ class Comments extends Component {
         this.setState({ comments, viewComments: true, isLoading: false });
       })
       .catch((err) => {
-        this.setState({ err, isLoading: false });
+        this.setState({ viewCommentsErr: err, isLoading: false });
       });
   };
 }

@@ -13,25 +13,16 @@ const CommentsList = ({ comments, username, handleCommentsClick }) => {
                 {author} | {created_at}
               </h4>
               <section>{body}</section>
-              <p>
-                Votes: {votes}
-                <VoteButtons
-                  votes={votes}
-                  endpoint={`/comments/${comment_id}`}
-                />
+              <section>
+                <VoteButtons votes={votes} endpoint={`/comments/${comment_id}`} />
                 {author === username ? (
-                  <button
-                    onClick={handleCommentsClick}
-                    className='button'
-                    value='delete'
-                    id={comment_id}
-                  >
+                  <button onClick={handleCommentsClick} className='button' value='delete' id={comment_id}>
                     Delete
                   </button>
                 ) : (
                   ''
                 )}
-              </p>
+              </section>
             </li>
           );
         })}

@@ -9,11 +9,11 @@ const ErrorHandler = (props) => {
         data: { msg }
       }
     } = props.err;
-    return <p>{`${status} - ${msg}`}</p>;
+    return <p style={{ fontSize: 'smaller', color: 'red' }}>{`${status} - ${msg}`}</p>;
   } else {
     //if error from Router handler
     const { status, msg } = props;
-    return <p>{`${status} - ${msg}`}</p>;
+    return <p style={{ fontSize: 'smaller', color: 'red' }}>{`${status} - ${msg}`}</p>;
   }
 };
 

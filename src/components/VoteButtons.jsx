@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { changeVotes } from '../api/votes';
+import ErrorHandler from './ErrorHandler';
 
 class VoteButtons extends Component {
   state = {
@@ -25,28 +26,22 @@ class VoteButtons extends Component {
       <div className='votesButtons'>
         <button
           onClick={() => {
-            this.updateVotes(endpoint, 1);
-          }}
-          className='button'
-        >
-          +
-        </button>
-        <p>{votes + voteChange}</p>
-        <button
-          onClick={() => {
             this.updateVotes(endpoint, -1);
           }}
           className='button'
         >
           -
         </button>
-        {err ? (
-          <p style={{ fontSize: 'smaller', color: 'red' }}>
-            {err.message + ' - unable to vote'}
-          </p>
-        ) : (
-          ''
-        )}
+        <p style={{ padding: '13px 2px', margin: '0px' }}>{votes + voteChange}</p>
+        <button
+          onClick={() => {
+            this.updateVotes(endpoint, 1);
+          }}
+          className='button'
+        >
+          +
+        </button>
+        {err ? <ErrorHandler status={503} msg={err.message}></ErrorHandler> : ''}
       </div>
     );
   }

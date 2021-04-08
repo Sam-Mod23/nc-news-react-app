@@ -1,5 +1,6 @@
 import './App.css';
 import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Router } from '@reach/router';
 import Title from './components/Title';
 import ArticleList from './components/ArticleList';
