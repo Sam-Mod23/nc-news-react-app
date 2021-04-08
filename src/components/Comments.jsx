@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { deleteComment, getComments, postComment } from '../api/comments';
+import CommentsViewAndPostButtons from './CommentsViewAndPostButtons';
+import CommentsList from './CommentsList';
 import ErrorHandler from './ErrorHandler';
 
 class Comments extends Component {
@@ -16,6 +18,7 @@ class Comments extends Component {
     const { viewComments, viewPostComment } = this.state;
     if (value === 'get') {
       if (!viewComments) {
+        this.setState({ viewComments: true, isLoading: true });
         this.fetchComments();
       } else {
         this.setState({ comments: [], viewComments: false });
@@ -26,6 +29,7 @@ class Comments extends Component {
     }
     if (value === 'delete') {
       deleteComment(this.props.article_id, id).then(() => {
+        this.setState({ viewComments: true, isLoading: true });
         this.fetchComments();
       });
     }
@@ -45,57 +49,22 @@ class Comments extends Component {
 
   render() {
     const { err, viewComments, viewPostComment, comments, isLoading } = this.state;
-
-    // if (isLoading) {
-    //   return <p>Loading...</p>;
-    // }
+    const { username } = this.props;
     if (err) {
       return <ErrorHandler err={err} />;
     }
     return (
       <div>
         {/* Comments buttons */}
-        <button className='button' value='get' onClick={this.handleCommentsClick}>
-          {viewComments ? 'Hide Comments' : 'View Comments'}
-        </button>
-        {viewPostComment ? (
-          <form>
-            <label htmlFor='body'></label>
-            <textarea type='text' key='body' name='body'></textarea>
-            <button onClick={this.handleCommentSubmit}>Submit</button>
-          </form>
-        ) : (
-          ''
-        )}
-        <button className='button' value='post' onClick={this.handleCommentsClick}>
-          {viewPostComment ? 'Cancel' : 'Post Comment'}
-        </button>
-
-        {/* Comments list */}
-        <ul className='CommentsList'>
-          {comments.map((comment) => {
-            const { created_at, author, body, votes, comment_id } = comment;
-            return (
-              <li className='CommentCard' key={comment_id}>
-                <h4 className='CommentHeaders'>
-                  {author} | {created_at}
-                </h4>
-                <section>{body}</section>
-                <p>
-                  Votes: {votes}
-                  <button className='button'>+</button>
-                  {author === this.props.username ? (
-                    <button onClick={this.handleCommentsClick} className='button' value='delete' id={comment_id}>
-                      Delete
-                    </button>
-                  ) : (
-                    ''
-                  )}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
+        <CommentsViewAndPostButtons
+          viewComments={viewComments}
+          viewPostComment={viewPostComment}
+          handleCommentsClick={this.handleCommentsClick}
+          handleCommentSubmit={this.handleCommentSubmit}
+        />
+        {/* Comments list, will display Loading if view comments has been clicked */}
+        {isLoading && viewComments ? <p>Loading...</p> : ''}
+        <CommentsList comments={comments} username={username} handleCommentsClick={this.handleCommentsClick} />
       </div>
     );
   }
@@ -103,7 +72,7 @@ class Comments extends Component {
   fetchComments = () => {
     getComments(this.props.article_id)
       .then((comments) => {
-        this.setState({ comments, viewComments: true });
+        this.setState({ comments, viewComments: true, isLoading: false });
       })
       .catch((err) => {
         this.setState({ err, isLoading: false });

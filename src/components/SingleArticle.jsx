@@ -3,6 +3,7 @@ import { getArticle } from '../api/articles';
 import ErrorHandler from './ErrorHandler';
 
 import Comments from './Comments';
+import VoteButtons from './VoteButtons';
 
 class SingleArticle extends Component {
   state = {
@@ -32,7 +33,8 @@ class SingleArticle extends Component {
       <main>
         <h2>{title}</h2>
         <h4>
-          {author} | {topic} | votes: {votes} <button className='button'>+</button>
+          {author} | {topic} |
+          <VoteButtons votes={votes} endpoint={`/articles/${article_id}`} />
         </h4>
         <section className='artBody'>{body}</section>
         <Comments article_id={article_id} username={this.props.username} />

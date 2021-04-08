@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getArticles } from '../api/articles';
 import { Link } from '@reach/router';
+import VoteButtons from './VoteButtons';
 
 class ArticleList extends Component {
   state = {
@@ -35,8 +36,10 @@ class ArticleList extends Component {
                 </Link>
                 <p className='artAuthor'>{author}</p>
                 <p className='artVotes'>
-                  <button className='button'>+</button>
-                  {votes} votes
+                  <VoteButtons
+                    votes={votes}
+                    endpoint={`/articles/${article_id}`}
+                  />
                 </p>
               </li>
             );
