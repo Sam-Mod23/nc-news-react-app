@@ -1,7 +1,7 @@
 import React from 'react';
 import VoteButtons from './VoteButtons';
 
-const CommentsList = ({ comments, username, handleCommentsClick }) => {
+const CommentsList = ({ comments, username, handleCommentsClick, commentsPage }) => {
   return (
     <section>
       <ul className='CommentsList'>

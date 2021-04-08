@@ -36,3 +36,8 @@
   padding: 5px;
   margin: 5px;
 }
+
+.articlesCustom {
+  display: flex;
+  justify-content: space-between;
+}

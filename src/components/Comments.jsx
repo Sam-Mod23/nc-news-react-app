@@ -3,6 +3,7 @@ import { deleteComment, getComments, postComment } from '../api/comments';
 import CommentsViewAndPostButtons from './CommentsViewAndPostButtons';
 import CommentsList from './CommentsList';
 import ErrorHandler from './ErrorHandler';
+import Pagination from './Pagination';
 
 class Comments extends Component {
   state = {
@@ -11,7 +12,16 @@ class Comments extends Component {
     isLoading: true,
     viewComments: false,
     viewPostComment: false,
-    comments: []
+    comments: [],
+    p: 1
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const { p } = this.state;
+    if (p !== prevState.p) {
+      this.setState({ isLoading: true });
+      this.fetchComments();
+    }
   };
 
   handleCommentsClick = (event) => {
@@ -53,8 +63,14 @@ class Comments extends Component {
       });
   };
 
+  incrementPage = (increment) => {
+    this.setState((currState) => {
+      return { p: currState.p + increment };
+    });
+  };
+
   render() {
-    const { viewCommentsErr, postCommentsErr, viewComments, viewPostComment, comments, isLoading } = this.state;
+    const { viewCommentsErr, postCommentsErr, viewComments, viewPostComment, comments, isLoading, p } = this.state;
     const { username } = this.props;
     if (viewCommentsErr) {
       return <ErrorHandler err={viewCommentsErr} />;
@@ -72,13 +88,16 @@ class Comments extends Component {
 
         {/* Comments list, will display Loading if view comments has been clicked */}
         {isLoading && viewComments ? <p>Loading...</p> : ''}
+        {!isLoading && viewComments ? <Pagination p={p} incrementPage={this.incrementPage} itemsLength={comments.length}></Pagination> : ''}
         <CommentsList comments={comments} username={username} handleCommentsClick={this.handleCommentsClick} />
+        {!isLoading && viewComments ? <Pagination p={p} incrementPage={this.incrementPage} itemsLength={comments.length}></Pagination> : ''}
       </div>
     );
   }
 
   fetchComments = () => {
-    getComments(this.props.article_id)
+    const { p } = this.state;
+    getComments(this.props.article_id, { p })
       .then((comments) => {
         this.setState({ comments, viewComments: true, isLoading: false });
       })
