@@ -4,6 +4,7 @@ import CommentsViewAndPostButtons from './CommentsViewAndPostButtons';
 import CommentsList from './CommentsList';
 import ErrorHandler from './ErrorHandler';
 import Pagination from './Pagination';
+import { SortDrop } from './SortByDropDown';
 
 class Comments extends Component {
   state = {
@@ -13,17 +14,21 @@ class Comments extends Component {
     viewComments: false,
     viewPostComment: false,
     comments: [],
-    p: 1
+    p: 1,
+    sort_by: 'created_at',
+    order: 'desc'
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    const { p, viewComments } = this.state;
+    const { viewComments, p, sort_by, order } = this.state;
     if (
+      (viewComments !== prevState.viewComments && viewComments) ||
       p !== prevState.p ||
-      (viewComments !== prevState.viewComments && viewComments)
+      sort_by !== prevState.sort_by ||
+      order !== prevState.order
     ) {
       this.setState({ isLoading: true });
-      this.fetchComments();
+      this.fetchComments({ p, sort_by, order });
     }
   };
 
@@ -33,7 +38,6 @@ class Comments extends Component {
     if (value === 'get') {
       if (!viewComments) {
         this.setState({ viewComments: true, isLoading: true });
-        this.fetchComments();
       } else {
         this.setState({ comments: [], viewComments: false });
       }
@@ -45,7 +49,7 @@ class Comments extends Component {
     }
     if (value === 'delete') {
       deleteComment(id).then(() => {
-        this.setState({ viewComments: true, isLoading: true });
+        this.setState({ isLoading: true });
         this.fetchComments();
       });
     }
@@ -59,10 +63,8 @@ class Comments extends Component {
     postComment(article_id, username, value)
       .then((comment) => {
         this.setState((currState) => {
-          console.log([...currState.comments]);
           return {
             comments: [comment, ...currState.comments],
-            // viewComments: true,
             viewPostComment: false,
             postCommentsErr: null
           };
@@ -80,6 +82,14 @@ class Comments extends Component {
     });
   };
 
+  sortElements = (sort_by) => {
+    this.setState({ sort_by });
+  };
+
+  sortOrder = (order) => {
+    this.setState({ order });
+  };
+
   render() {
     const {
       viewCommentsErr,
@@ -88,12 +98,17 @@ class Comments extends Component {
       viewPostComment,
       comments,
       isLoading,
-      p
+      p,
+      order,
+      sort_by
     } = this.state;
     const { username } = this.props;
+    const options = ['created_at', 'votes', 'author'];
+
     if (viewCommentsErr) {
       return <ErrorHandler err={viewCommentsErr} />;
     }
+
     return (
       <div>
         {/* Comments buttons */}
@@ -103,47 +118,47 @@ class Comments extends Component {
           handleCommentsClick={this.handleCommentsClick}
           handleCommentSubmit={this.handleCommentSubmit}
         />
-        {postCommentsErr ? (
-          <ErrorHandler
-            status={400}
-            msg={'Incomplete fields, please try again'}
-          />
-        ) : (
-          ''
-        )}
+        {postCommentsErr && <ErrorHandler err={postCommentsErr} />}
 
         {/* Comments list, will display Loading if view comments has been clicked */}
         {isLoading && viewComments ? <p>Loading...</p> : ''}
-        {!isLoading && viewComments ? (
-          <Pagination
-            p={p}
-            incrementPage={this.incrementPage}
-            itemsLength={comments.length}
-          ></Pagination>
-        ) : (
-          ''
+        {!isLoading && viewComments && (
+          <section className='articlesCustom'>
+            <Pagination
+              p={p}
+              incrementPage={this.incrementPage}
+              itemsLength={comments.length}
+            ></Pagination>
+            <SortDrop
+              options={options}
+              sortElements={this.sortElements}
+              sortOrder={this.sortOrder}
+              order={order}
+              sort_by={sort_by}
+            />
+          </section>
         )}
         <CommentsList
           comments={comments}
           username={username}
           handleCommentsClick={this.handleCommentsClick}
         />
-        {!isLoading && viewComments ? (
-          <Pagination
-            p={p}
-            incrementPage={this.incrementPage}
-            itemsLength={comments.length}
-          ></Pagination>
-        ) : (
-          ''
+        {!isLoading && viewComments && (
+          <section className='articlesCustom'>
+            <Pagination
+              p={p}
+              incrementPage={this.incrementPage}
+              itemsLength={comments.length}
+            ></Pagination>
+          </section>
         )}
       </div>
     );
   }
 
-  fetchComments = () => {
-    const { p } = this.state;
-    getComments(this.props.article_id, { p })
+  fetchComments = (params) => {
+    const { article_id } = this.props;
+    getComments(article_id, params)
       .then((comments) => {
         this.setState({ comments, viewComments: true, isLoading: false });
       })

@@ -15,3 +15,7 @@ export const getArticle = (article_id) => {
     return data.article;
   });
 };
+
+export const deleteArticle = (article_id) => {
+  return ncApi.delete(`/articles/${article_id}`);
+};

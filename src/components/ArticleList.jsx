@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getArticles } from '../api/articles';
+import { getArticles, deleteArticle } from '../api/articles';
 import { Link } from '@reach/router';
 import VoteButtons from './VoteButtons';
 import { SortDrop } from './SortByDropDown';
@@ -11,7 +11,8 @@ class ArticleList extends Component {
     isLoading: true,
     p: 1,
     sort_by: 'created_at',
-    order: 'desc'
+    order: 'desc',
+    stateTopic: undefined
   };
 
   componentDidMount = () => {
@@ -20,18 +21,20 @@ class ArticleList extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     const { topic } = this.props;
-    const { p, sort_by, order } = this.state;
+    const { p, sort_by, order, stateTopic } = this.state;
     if (
       topic !== prevProps.topic ||
+      topic !== stateTopic ||
       p !== prevState.p ||
       sort_by !== prevState.sort_by ||
       order !== prevState.order
     ) {
+      this.setState({ stateTopic: topic });
       this.fetchArticles({ topic, p, sort_by, order });
     }
   };
 
-  sortArticles = (sort_by) => {
+  sortElements = (sort_by) => {
     this.setState({ sort_by });
   };
 
@@ -43,6 +46,15 @@ class ArticleList extends Component {
     this.setState((currState) => {
       return { p: currState.p + increment };
     });
+  };
+
+  handleDeleteClick = (event) => {
+    const { article_id } = event.target.id;
+    if (window.confirm('Are you sure you want to delete this article?')) {
+      deleteArticle(article_id).then(() => {
+        this.fetchArticles();
+      });
+    }
   };
 
   render() {
@@ -61,7 +73,7 @@ class ArticleList extends Component {
           ></Pagination>
           <SortDrop
             options={options}
-            sortArticles={this.sortArticles}
+            sortElements={this.sortElements}
             sortOrder={this.sortOrder}
             order={order}
             sort_by={sort_by}
@@ -86,6 +98,13 @@ class ArticleList extends Component {
                       endpoint={`/articles/${article_id}`}
                     />
                   </section>
+                  {this.props.username === author && (
+                    <section className='deleteArticle'>
+                      <button id={article_id} onClick={this.handleDeleteClick}>
+                        X
+                      </button>
+                    </section>
+                  )}
                 </li>
               );
             }

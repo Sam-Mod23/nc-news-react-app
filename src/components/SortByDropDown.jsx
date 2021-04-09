@@ -4,7 +4,7 @@ import DropdownButton from 'react-bootstrap/esm/DropdownButton';
 
 export const SortDrop = (props) => {
   return (
-    <div className='sortArticles'>
+    <div className='sortElements'>
       <DropdownButton
         size='sm'
         menuAlign='right'
@@ -17,7 +17,7 @@ export const SortDrop = (props) => {
               key={option}
               eventKey={option}
               onSelect={() => {
-                props.sortArticles(option);
+                props.sortElements(option);
               }}
             >
               {option}
