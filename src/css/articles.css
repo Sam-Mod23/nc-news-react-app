@@ -41,3 +41,7 @@
   display: flex;
   justify-content: space-between;
 }
+
+.sortArticles {
+  display: flex;
+}

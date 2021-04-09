@@ -1,7 +1,12 @@
 import React from 'react';
 import VoteButtons from './VoteButtons';
 
-const CommentsList = ({ comments, username, handleCommentsClick, commentsPage }) => {
+const CommentsList = ({
+  comments,
+  username,
+  handleCommentsClick,
+  commentsPage
+}) => {
   return (
     <section>
       <ul className='CommentsList'>
@@ -14,13 +19,19 @@ const CommentsList = ({ comments, username, handleCommentsClick, commentsPage })
               </h4>
               <section>{body}</section>
               <section>
-                <VoteButtons votes={votes} endpoint={`/comments/${comment_id}`} />
-                {author === username ? (
-                  <button onClick={handleCommentsClick} className='button' value='delete' id={comment_id}>
+                <VoteButtons
+                  votes={votes}
+                  endpoint={`/comments/${comment_id}`}
+                />
+                {author === username && (
+                  <button
+                    onClick={handleCommentsClick}
+                    className='button'
+                    value='delete'
+                    id={comment_id}
+                  >
                     Delete
                   </button>
-                ) : (
-                  ''
                 )}
               </section>
             </li>

@@ -4,20 +4,36 @@ import DropdownButton from 'react-bootstrap/esm/DropdownButton';
 
 export const SortDrop = (props) => {
   return (
-    <DropdownButton size='sm' menuAlign='right' id='dropdown-basic-button' title='Sort By'>
-      {props.options.map((option) => {
-        return (
-          <DropdownItem
-            key={option}
-            eventKey={option}
-            onSelect={() => {
-              props.sortArticles(option);
-            }}
-          >
-            {option}
-          </DropdownItem>
-        );
-      })}
-    </DropdownButton>
+    <div className='sortArticles'>
+      <DropdownButton
+        size='sm'
+        menuAlign='right'
+        id='dropdown-basic-button'
+        title={`Sort By: ${props.sort_by}`}
+      >
+        {props.options.map((option) => {
+          return (
+            <DropdownItem
+              key={option}
+              eventKey={option}
+              onSelect={() => {
+                props.sortArticles(option);
+              }}
+            >
+              {option}
+            </DropdownItem>
+          );
+        })}
+      </DropdownButton>
+      <span>
+        <button
+          onClick={() => {
+            props.sortOrder(props.order === 'desc' ? 'asc' : 'desc');
+          }}
+        >
+          {props.order === 'desc' ? '↑' : '↓'}
+        </button>
+      </span>
+    </div>
   );
 };

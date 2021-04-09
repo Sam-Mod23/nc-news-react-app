@@ -15,12 +15,15 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-        <Title />
+        <Title username={this.state.username} />
         <Navbar />
         <Router primary={false} className='Content'>
           <ArticleList path='/' username={this.state.username} />
           <ArticleList path='/:topic/articles' username={this.state.username} />
-          <SingleArticle path='/articles/:article_id' username={this.state.username} />
+          <SingleArticle
+            path='/articles/:article_id'
+            username={this.state.username}
+          />
           <ErrorHandler default status={404} msg={'Not found'} />
         </Router>
       </div>

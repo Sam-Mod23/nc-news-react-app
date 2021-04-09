@@ -11,6 +11,9 @@
 }
 
 .App-header {
+  display: grid;
+  grid-template-rows: 1fr 5fr;
+  grid-template-areas: 'login';
   border: 2px red solid;
   grid-area: App-header;
 }
@@ -23,6 +26,12 @@
 .Content {
   border: 2px blue solid;
   grid-area: Content;
+}
+
+.login {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 70%;
 }
 
 @media only screen and (min-width: 450px) {
