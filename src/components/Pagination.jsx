@@ -6,7 +6,8 @@ const Pagination = (props) => {
   return (
     <div>
       <button
-        style={{ margin: '2px 2px' }}
+        // style={{ margin: '2px 2px' }}
+        className='button'
         disabled={p === 1}
         onClick={() => {
           incrementPage(-1);
@@ -16,7 +17,8 @@ const Pagination = (props) => {
       </button>
       <span>Page: {p}</span>
       <button
-        style={{ margin: '2px 2px' }}
+        className='button'
+        // style={{ margin: '2px 2px' }}
         disabled={itemsLength / 10 < p}
         onClick={() => {
           incrementPage(1);

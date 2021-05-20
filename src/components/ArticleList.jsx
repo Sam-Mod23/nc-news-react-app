@@ -100,7 +100,11 @@ class ArticleList extends Component {
                   </section>
                   {this.props.username === author && (
                     <section className='deleteArticle'>
-                      <button id={article_id} onClick={this.handleDeleteClick}>
+                      <button
+                        className='button'
+                        id={article_id}
+                        onClick={this.handleDeleteClick}
+                      >
                         X
                       </button>
                     </section>
