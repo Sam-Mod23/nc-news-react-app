@@ -30,10 +30,10 @@ class SingleArticle extends Component {
 
     return (
       /* Article Body */
-      <main>
+      <main className='Content'>
         <h2>{title}</h2>
         <h4>
-          {author} | {topic} |
+          {author} | {topic}
           <VoteButtons votes={votes} endpoint={`/articles/${article_id}`} />
         </h4>
         <section className='artBody'>{body}</section>

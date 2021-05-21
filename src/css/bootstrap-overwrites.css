@@ -1,0 +1,21 @@
+a {
+  color: unset !important;
+}
+
+a:hover {
+  color: unset !important;
+}
+
+.btn-primary {
+  background-color: transparent !important;
+}
+
+.btn-primary:hover {
+  background-color: #62be96 !important;
+}
+
+.dropdown {
+  margin-top: 5px;
+  padding: 4px;
+  margin-bottom: 5px;
+}

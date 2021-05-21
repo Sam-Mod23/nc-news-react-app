@@ -10,9 +10,23 @@
   list-style-type: none;
   margin: 2px;
   padding: 5px;
-  border: 2px lightblue solid;
+  color: #171f2d;
   align-items: center;
+  border-radius: 20px;
+  background-color: #f0f1f3;
+  font-size: 70%;
 }
+
+.articleCard:hover {
+  background-color: #676265;
+  color: #f0f1f3;
+}
+
+.articleCard:nth-child(odd):hover {
+  /* background-color: #81876f; */
+}
+
+/* #05386B, #379683, #5CDB95, #8EE4AF, #EDF5E1 */
 
 .artTitle {
   grid-column-start: 2;
@@ -29,7 +43,7 @@
 .artAuthor {
   grid-column-start: 1;
   grid-row-start: 2;
-  font-size: small;
+  font-size: 70%;
 }
 
 .artBody {
@@ -47,9 +61,18 @@
 }
 
 .deleteArticle {
-  display: flex;
-  justify-content: flex-end;
-  width: 50px;
+  /* display: flex; */
+  /* justify-content: flex-end; */
+  /* width: 50px; */
   grid-row-start: 2;
   font-size: smaller;
+}
+
+@media only screen and (min-width: 450px) {
+  .articleCard {
+    font-size: inherit;
+  }
+  .artAuthor {
+    font-size: small;
+  }
 }

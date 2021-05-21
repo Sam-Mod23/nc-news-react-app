@@ -27,6 +27,7 @@ export const SortDrop = (props) => {
       </DropdownButton>
       <span>
         <button
+          className='button'
           onClick={() => {
             props.sortOrder(props.order === 'desc' ? 'asc' : 'desc');
           }}
