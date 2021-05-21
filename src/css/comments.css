@@ -7,8 +7,9 @@
 .CommentCard {
   border: 2px mediumspringgreen solid;
   list-style-type: none;
+  background-color: #676265;
 }
 
 .CommentHeaders {
-  color: grey;
+  color: #171f2d;
 }
